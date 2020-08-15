@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Delete User</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>User Directory</h3>
+    <hr>
+
+    <p class="h4 mb-4">Delete User</p>
+
+    <form action="#" th:action="@{/admin/delete}" th:object="${user}" method="POST">
+
+        <!-- Add hidden form field to handle update -->
+        <input type="hidden" th:field="*{id}">
+
+        <label>
+            <input type="text" th:field="*{name}" class="form-control mb-4 col-4" placeholder="name">
+        </label>
+
+        <label>
+            <input type="text" th:field="*{surname}" class="form-control mb-4 col-4" placeholder="surname">
+        </label>
+
+        <label>
+            <input type="text" th:field="*{age}" class="form-control mb-4 col-4" placeholder="age">
+        </label>
+
+        <label>
+            <input type="text" th:field="*{email}" class="form-control mb-4 col-4" placeholder="email">
+        </label>
+
+        <label>
+            <input type="text" th:field="*{password}" class="form-control mb-4 col-4" placeholder="password">
+        </label>
+
+        <label>
+            <input type="text" th:field="*{confirmPassword}" class="form-control mb-4 col-4" placeholder="confirmPassword">
+        </label>
+
+
+        <th:block th:each="role : ${user.getRoles()}">
+            <a th:text="${role.name()}"></a>
+        </th:block>
+        <ul>
+            <li th:each="role : ${roles}">
+                <label>
+                    <input type="checkbox" th:field="*{roles}" th:value="${role.name()}" />
+                </label>
+                <label th:for="${#ids.prev('roles')}"
+                       th:text="#{${role.name()}}"></label>
+            </li>
+        </ul>
+
+
+        <button type="submit" class="btn btn-danger col-2">Delete</button>
+
+    </form>
+
+    <hr>
+    <a th:href="@{/admin}">Back to Admin Page</a>
+
+</div>
+</body></html>

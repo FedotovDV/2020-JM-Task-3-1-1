@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Welcome</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+
+</head>
+
+<body>
+<div class="card text-center">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h3 class="card-title">WELCOME</h3>
+        <p>
+            <a class="btn btn-md btn-outline-info" role="button" th:href="@{~/login}">Login</a>
+            <a class="btn btn-md btn-outline-danger" role="button" th:href="@{/logout}">Logout</a>
+        </p>
+        <div class="container  text-center">
+            <a th:href="@{/registration}">Registration</a>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+    </div>
+</div>
+
+
+</body>
+</html>
+
+
