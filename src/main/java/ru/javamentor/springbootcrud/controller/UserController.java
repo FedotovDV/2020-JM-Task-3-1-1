@@ -30,6 +30,12 @@ public class UserController {
         this.userValidator = userValidator;
     }
 
+    @GetMapping("/index")
+    public String index(Model model) {
+
+        return "index";
+    }
+
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -59,6 +65,7 @@ public class UserController {
     public ModelAndView userForm(Authentication authentication) {
         ModelAndView modelAndView = new ModelAndView();//(ModelAndView modelAndView, Principal principal) {
         String email = authentication.getName();
+
         User user = (User) userService.loadUserByUsername(email);
         String titleRole = "USER";
         for (Role role : user.getRoles()) {
@@ -70,6 +77,7 @@ public class UserController {
 
         modelAndView.addObject("titleRole", titleRole);
         modelAndView.addObject("user", user);
+        modelAndView.addObject("authentication", authentication);
         modelAndView.setViewName("user");
         return modelAndView;
     }
