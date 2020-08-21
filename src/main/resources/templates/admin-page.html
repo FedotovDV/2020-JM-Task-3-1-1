@@ -4,88 +4,178 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Edit User</title>
+    <title>Index Form</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
 </head>
-
 <body>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="#" th:text="${authentication.getName()}">Navbar w/ text</a>
 
-<nav class="navbar navbar-dark bg-dark fixed-top">
-    <p style="color: white" class="text-sm-left  font-weight-bold  " th:text="${user.getEmail()}"></p>
-    <p style="color: white" class="text-sm-left  font-weight-bold  " th:text="${titleRole}"></p>
-    <p><a class="btn btn-md btn-danger" th:href="@{/logout}" role="button">Logout</a></p>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <a style="color: white" class="text-md-left">with roles:</a>
+            <th:block th:each="role : ${admin.getRoles()}">
+                <a style="color: white" class="mx-1" th:text="${role.name()}">ADMIN</a>
+            </th:block>
+        </ul>
+        <a style="color: white" class="btn btn-md btn-link" th:href="@{/logout}" role="button">Logout</a>
     </div>
 </nav>
-
-
-<div class="container">
-    <div class="container">
-        <h4 style="color: green" class="text-center display-4 font-weight-bold pt-8 ">User page</h4>
+<div class="card-group">
+    <div class="form-text col-2">
+        <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" id="v-pills-users-tab" data-toggle="pill" href="#pills-users" role="tab"
+               aria-controls="v-pills-home" aria-selected="true">ADMIN</a>
+            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#pills-newuser" role="tab"
+               aria-controls="v-pills-newuser" aria-selected="false">USER</a>
+        </div>
     </div>
-    <div class="card text-center">
+    <div class="form-control-plaintext col-10 bg-light">
         <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Users table</a>
+            <h3 class="card-title">Table title</h3>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="users-tab" data-toggle="tab" href="#pills-users" role="tab"
+                       aria-controls="users" aria-selected="true">Users table</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/admin/add}">New user</a>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="newuser-tab" data-toggle="tab" data-placement="rigth"
+                       title="Create new user" href="#pills-newuser" role="tab"
+                       aria-controls="newuser" aria-selected="false">New user</a>
                 </li>
             </ul>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Admin panel</h5>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-users" role="tabpanel"
+                     aria-labelledby="pills-users-tab">
+                    <div class="form-text">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title font-weight-bold">Card title</h5>
+                            </div>
+                            <div class="card-body">
 
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="text-center">Id</th>
+                                        <th scope="col" class="text-center">Name</th>
+                                        <th scope="col" class="text-center">Surname</th>
+                                        <th scope="col" class="text-center">Age</th>
+                                        <th scope="col" class="text-center">Email</th>
+                                        <th scope="col" class="text-center">Role</th>
+                                        <th scope="col" class="text-center">Edit</th>
+                                        <th scope="col" class="text-center">Delete</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <th:block th:each="user : ${users}">
+                                        <tr>
+                                            <th th:text="${user.getId()}"></th>
+                                            <td th:text="${user.getName()}"></td>
+                                            <td th:text="${user.getSurname()}"></td>
+                                            <td th:text="${user.getAge()}"></td>
+                                            <td th:text="${user.getEmail()}"></td>
+                                            <td>
+                                                <th:block th:each="role : ${user.getRoles()}">
+                                                    <a th:text="${role.name()}"></a>
+                                                </th:block>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/admin/update(id=${user.id})}"
+                                                   class="btn btn-outline-info">Edit</a>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/admin/delete(id=${user.id})}"
+                                                   class="btn btn-outline-danger">
+                                                    Delete</a>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-newuser" role="tabpanel" aria-labelledby="pills-newuser-tab">
+                    <br>
+                    <p class="h5 mb-4">Add new User</p>
+                    <div class="form-text bg-white">
+                        <div class="form-text">
 
-            <div class="container">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col" class="text-center">Id</th>
-                        <th scope="col" class="text-center">Name</th>
-                        <th scope="col" class="text-center">Surname</th>
-                        <th scope="col" class="text-center">Age</th>
-                        <th scope="col" class="text-center">Email</th>
-                        <th scope="col" class="text-center">Role</th>
-                        <th scope="col" class="text-center" colspan="2">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                            <!-- Add hidden form field to handle update -->
+                            <input type="hidden" th:field="*{usernew.id}">
 
-                    <th:block th:each="user : ${users}">
+                            <input type="text" th:field="*{usernew.name}" class="form-control mb-4 col-4" placeholder="name">
 
-                        <tr>
-                            <th th:text="${user.id}"></th>
-                            <td th:text="${user.name}"></td>
-                            <td th:text="${user.surname}"></td>
-                            <td th:text="${user.age}"></td>
-                            <td th:text="${user.email}"></td>
-                            <td>
-                                <th:block th:each="role : ${user.getRoles()}">
-                                    <a th:text="${role.name()}"></a>
-                                </th:block>
-                            </td>
+                            <input type="text" th:field="*{usernew.surname}" class="form-control mb-4 col-4"
+                                   placeholder="surname">
 
-                            <td>
-                                <a th:href="@{/admin/update(id=${user.id})}" class="btn btn-outline-info">Edit</a>
-                            </td>
+                            <input type="text" th:field="*{usernew.age}" class="form-control mb-4 col-4" placeholder="age">
 
-                            <td>
-                                <a th:href="@{/admin/delete(id=${user.id})}" class="btn btn-outline-danger"> Delete</a>
-                            </td>
-                        </tr>
+                            <input type="text" th:field="*{usernew.email}" class="form-control mb-4 col-4" placeholder="email">
 
-                    </th:block>
-                    </tbody>
-                </table>
+                            <input type="text" th:field="*{usernew.password}" class="form-control mb-4 col-4"
+                                   placeholder="password">
+
+                            <input type="text" th:field="*{usernew.confirmPassword}" class="form-control mb-4 col-4"
+                                   placeholder="confirmPassword">
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label col-form-label-lg">Role</label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" name="userRole" value="USER">USER<Br>
+                                    <input type="checkbox" name="adminRole" value="ADMIN">ADMIN<Br>
+                                </div>
+                            </div>
+                        <p><a th:href="@{/admin/add}" th:object="${usernew}" method="POST"
+                              class="btn btn-outline-info" col-2>Add user</a></p>
+<!--                            <button type="submit" class="btn btn-info col-2">Save</button>-->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<!-- JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+
+
+<!--<script>-->
+<!--    $('#myModal').modal("toggle");-->
+
+<!--    $('#myModal').on('shown.bs.modal', function (event) {-->
+<!--        // функции-->
+<!--        alert("Выполенно");-->
+<!--    });-->
+<!--    $(function () {-->
+<!--        $('[data-toggle="tooltip tab"]').tooltip()-->
+<!--    });-->
+<!--    // $('a[data-toggle="pill"]').on('hidden.bs.tab', function (e) {-->
+<!--    //     console.log(e.target); // вкладка, которая стала активной-->
+<!--    //     console.log(e.relatedTarget); // предыдущая активная вкладка-->
+<!--    // })-->
+<!--</script>-->
 </body>
 </html>
+
+

@@ -1,6 +1,8 @@
 package ru.javamentor.springbootcrud.config;
 
 
+
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +16,6 @@ import ru.javamentor.springbootcrud.service.UserService;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
 
 
     private final UserService userService; // сервис, с помощью которого тащим пользователя
@@ -31,9 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/registration","/index", "/login").anonymous()
-                .antMatchers("/user","/user/*").authenticated()
-                .antMatchers("/admin", "/admin/*").hasAnyAuthority("ADMIN")
+                .antMatchers( "/css/**","/resources/**","/static/**","/js/**").permitAll()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .antMatchers("/", "/registration", "/test", "/index", "/login").anonymous()
+                .antMatchers("/user", "/user/*", "/test", "/index").authenticated()
+                .antMatchers("/admin", "/admin/*", "/admin#*").hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .formLogin()
@@ -42,8 +45,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .failureUrl("/login?error=true")
                 .successHandler(loginSuccessHandler)
-                .and()
-                .rememberMe()
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/user")
@@ -59,8 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService)
                 .passwordEncoder(passwordEncoder);
     }
-
-
 
 
 }

@@ -46,7 +46,19 @@
         </label>
 
         <input type="text" th:field="*{confirmPassword}" class="form-control mb-4 col-4" placeholder="confirmPassword">
-        <a th:text="${role.name()}"></a>
+
+        <th:block th:each="role : ${user.getRoles()}">
+            <a th:text="${role.name()}"></a>
+        </th:block>
+        <ul>
+            <li th:each="role : ${roles}">
+                <label>
+                    <input type="checkbox" th:field="*{roles}" th:value="${role.name()}" />
+                </label>
+                <label th:for="${#ids.prev('roles')}"
+                       th:text="#{${role.name()}}"></label>
+            </li>
+        </ul>
 
         <div class="form-group row">
             <label class="col-sm-2 col-form-label col-form-label-lg">Role</label>

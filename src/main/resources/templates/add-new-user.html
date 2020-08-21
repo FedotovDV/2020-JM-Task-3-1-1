@@ -20,7 +20,7 @@
 
     <p class="h4 mb-4">Add new User</p>
 
-    <form action="#" th:action="@{/admin/add}" th:object="${user}" method="POST">
+    <form action="#" th:action="@{/admin/add}" th:object="${usernew}" method="POST">
 
         <!-- Add hidden form field to handle update -->
         <input type="hidden" th:field="*{id}">

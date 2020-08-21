@@ -31,10 +31,31 @@ public class UserController {
     }
 
     @GetMapping("/index")
-    public String index(Model model) {
+    public String indexGet(Model model) {
 
         return "index";
     }
+
+
+    @GetMapping("/test")
+    public ModelAndView testGet() {
+        ModelAndView modelAndView = new ModelAndView();
+        List<User> users = userService.findAll();
+        modelAndView.addObject("message", "MESSAGE");
+        modelAndView.setViewName("test");
+        return modelAndView;
+    }
+
+
+    @PostMapping("/index")
+    public ModelAndView indexPost(@ModelAttribute("usernew") String user) {
+        System.out.println( user);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
+    }
+
+
 
 
     @GetMapping("/registration")
@@ -84,18 +105,36 @@ public class UserController {
 
 
     @GetMapping("/admin")
-    public ModelAndView admin(ModelAndView modelAndView, Principal principal) {
-        String email = principal.getName();
-        User user = (User) userService.loadUserByUsername(email);
+    public ModelAndView admin(ModelAndView modelAndView, Authentication authentication) {
+        String email = authentication.getName();
+        User admin = (User) userService.loadUserByUsername(email);
         String titleRole = "ADMIN";
         List<User> users = userService.findAll();
-        modelAndView.addObject("user", user);
+        modelAndView.addObject("admin", admin);
         modelAndView.addObject("titleRole", titleRole);
         modelAndView.addObject("users", users);
+        modelAndView.addObject("authentication", authentication);
+        modelAndView.addObject("usernew", new User());
+        modelAndView.addObject("rolesnew", new HashSet<Role>());
         modelAndView.setViewName("admin-page");
         return modelAndView;
     }
 
+    @PostMapping({"/admin"})
+    public ModelAndView adminPost(@ModelAttribute("usernew") User user, BindingResult result,
+                                @RequestParam(value = "userRole", required = false) String userRole,
+                                @RequestParam(value = "adminRole", required = false) String adminRole) {
+        System.out.println("User "+ user.getName());
+        userValidator.validate(user, result);
+        if (result.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("add-new-user");
+            return modelAndView;
+        }
+        setUserRoles(user, userRole, adminRole);
+        userService.saveUser(user);
+        return new ModelAndView("redirect:/admin");
+    }
 
     @GetMapping("/admin/add")
     public ModelAndView addGet() {
@@ -107,17 +146,19 @@ public class UserController {
     }
 
 
+
+
     @PostMapping({"/admin/add"})
-    public ModelAndView addPost(@ModelAttribute("user") User user, BindingResult result,
+    public ModelAndView addPost(@ModelAttribute("usernew") User user,
                                 @RequestParam(value = "userRole", required = false) String userRole,
                                 @RequestParam(value = "adminRole", required = false) String adminRole) {
 
-        userValidator.validate(user, result);
-        if (result.hasErrors()) {
-            ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("add-new-user");
-            return modelAndView;
-        }
+//        userValidator.validate(user, result);
+//        if (result.hasErrors()) {
+//            ModelAndView modelAndView = new ModelAndView();
+//            modelAndView.setViewName("add-new-user");
+//            return modelAndView;
+//        }
         setUserRoles(user, userRole, adminRole);
         userService.saveUser(user);
         return new ModelAndView("redirect:/admin");

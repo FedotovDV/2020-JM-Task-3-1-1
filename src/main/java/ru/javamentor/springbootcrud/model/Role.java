@@ -8,8 +8,8 @@ import javax.persistence.Table;
 
 public enum Role implements GrantedAuthority {
 
-    USER,
-    ADMIN;
+    ADMIN,
+    USER;
 
     @Override
     public String getAuthority() {
